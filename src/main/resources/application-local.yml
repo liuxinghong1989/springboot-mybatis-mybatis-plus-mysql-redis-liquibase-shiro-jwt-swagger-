@@ -5,16 +5,16 @@ spring:
   datasource:
     name: test
     url: jdbc:mysql://18.136.204.238:3306/springboot_demo?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
-    username: root
-    password: root
+    username:
+    password:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.jdbc.Driver
 
   redis:
     database: 3
-    host: 18.136.204.238
+    host:
     port: 6379
-    password: root
+    password:
   cache:
     type: redis
 
