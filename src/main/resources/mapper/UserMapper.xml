@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.UserMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.demo.entity.User">
+        <id column="id" property="id" />
+        <result column="user_no" property="userNo" />
+        <result column="mobile_no" property="mobileNo" />
+        <result column="login_id" property="loginId" />
+        <result column="password" property="password" />
+        <result column="weixin_id" property="weixinId" />
+        <result column="reg_time" property="regTime" />
+        <result column="reg_term_id" property="regTermId" />
+        <result column="name" property="name" />
+        <result column="address" property="address" />
+        <result column="email" property="email" />
+        <result column="photo_addr" property="photoAddr" />
+        <result column="birthday" property="birthday" />
+        <result column="idcard_no" property="idcardNo" />
+        <result column="driver_no" property="driverNo" />
+        <result column="driver_img1" property="driverImg1" />
+        <result column="driver_img2" property="driverImg2" />
+        <result column="integral" property="integral" />
+        <result column="sms_push_flag" property="smsPushFlag" />
+        <result column="nocensce_flag" property="nocensceFlag" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="status" property="status" />
+        <result column="client_id" property="clientId" />
+    </resultMap>
+
+
+    <sql id="Base_Column_List">
+        id, user_no AS userNo, mobile_no AS mobileNo, login_id AS loginId, password, weixin_id AS weixinId, reg_time AS regTime, reg_term_id AS regTermId, name, address, email, photo_addr AS photoAddr, birthday, idcard_no AS idcardNo, driver_no AS driverNo, driver_img1 AS driverImg1, driver_img2 AS driverImg2, integral, sms_push_flag AS smsPushFlag, nocensce_flag AS nocensceFlag, create_time AS createTime, update_time AS updateTime, status, client_id AS clientId
+    </sql>
+
+    <select id="selectByParam"  resultMap="BaseResultMap">
+      select  * from  user order by id
+    </select>
+</mapper>
