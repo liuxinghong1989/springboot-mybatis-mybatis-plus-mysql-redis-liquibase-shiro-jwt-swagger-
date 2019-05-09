@@ -6,6 +6,8 @@ server:
 spring:
   profiles:
     active: local
+  application:
+    name: spring-demo
 liquibase:
   path: classpath:migrates/master.xml
   #配置文件上传支持文件大小
@@ -18,12 +20,6 @@ servlet:
 file:
   upload:
     acceptTypes: txt,jpg,jpeg,png,gif,svg,ico,doc,docx,xls,xlsx,ppt,pptx,pdf,flv,mp4,avi,rmvb
-
-nacos:
-  config:
-    server-addr: 192.168.60.182:8848
-  discovery:
-    server-addr: 192.168.60.182:8848
 
 mybatis-plus:
   mapper-locations: classpath*:mapper/*.xml

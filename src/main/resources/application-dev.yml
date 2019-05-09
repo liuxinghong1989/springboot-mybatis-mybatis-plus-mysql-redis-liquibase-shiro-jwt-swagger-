@@ -1,7 +1,5 @@
 
 spring:
-  application:
-    name: sb-dev
   datasource:
     name: test
     url: jdbc:mysql://bj-cdb-bzs3kghm.sql.tencentcdb.com:63339/db_nsop_dev?useUnicode=true&characterEncoding=UTF-8&useSSL=true

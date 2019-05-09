@@ -8,6 +8,8 @@ import com.example.demo.baseclass.BaseController;
 import com.example.demo.entity.User;
 import com.example.demo.service.UserService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +47,10 @@ public class UserController extends BaseController {
 
     @GetMapping("/list")
     @ApiOperation(value="用户列表", notes="")
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "pageNO", value = "页数", required = true, dataType = "Integer"),
+        @ApiImplicitParam(name = "pageSize", value = "每页数量", required = true, dataType = "Integer")
+    })
     public  Object list(@RequestParam("pageNO") Integer pageNO,@RequestParam("pageSize") Integer pageSize){
            return success(userService.pageList(pageNO,pageSize));
     }
