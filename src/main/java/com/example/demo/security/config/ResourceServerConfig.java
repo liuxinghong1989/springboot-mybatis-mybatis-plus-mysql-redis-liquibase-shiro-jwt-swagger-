@@ -29,7 +29,9 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
             "/webjars/**",
             //业务放行接口
             //资源下载
+            // "/auth/oauth/token",
             "/file/download/**"
+
     };
 
 
