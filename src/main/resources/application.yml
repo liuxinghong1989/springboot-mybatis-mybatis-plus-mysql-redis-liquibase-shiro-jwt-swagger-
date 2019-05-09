@@ -19,6 +19,12 @@ file:
   upload:
     acceptTypes: txt,jpg,jpeg,png,gif,svg,ico,doc,docx,xls,xlsx,ppt,pptx,pdf,flv,mp4,avi,rmvb
 
+nacos:
+  config:
+    server-addr: 192.168.60.182:8848
+  discovery:
+    server-addr: 192.168.60.182:8848
+
 mybatis-plus:
   mapper-locations: classpath*:mapper/*.xml
   #实体扫描，多个package用逗号或者分号分隔
