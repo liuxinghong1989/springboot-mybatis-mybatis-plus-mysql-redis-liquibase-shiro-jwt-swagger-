@@ -9,14 +9,23 @@ spring:
   application:
     name: spring-demo
 
-
 security:
+  basic:
+    enabled: false
   oauth2:
     client:
       access-token-uri: http://localhost:8090/auth/oauth/token
       user-authorization-uri: http://localhost:8090/auth/oauth/authorize
     resource:
       token-info-uri: http://localhost:8090/auth/user
+
+proxy:
+  auth:
+    routes:
+      auth-server: oauth2
+
+
+
 liquibase:
   path: classpath:migrates/master.xml
   #配置文件上传支持文件大小

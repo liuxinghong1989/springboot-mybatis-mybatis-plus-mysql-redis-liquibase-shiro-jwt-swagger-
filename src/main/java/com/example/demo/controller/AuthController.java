@@ -1,4 +1,4 @@
-package com.example.demo.security.controller;
+package com.example.demo.controller;
 
 import com.example.demo.baseclass.BaseController;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +18,11 @@ public class AuthController extends BaseController {
     @GetMapping("/user")
     public Principal user(Principal user){
         return user;
+    }
+
+    public Object getToken(){
+
+        return success();
     }
 
 
