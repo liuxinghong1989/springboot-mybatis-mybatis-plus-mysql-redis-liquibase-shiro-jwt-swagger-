@@ -9,6 +9,7 @@ import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.Contact;
 import springfox.documentation.service.Parameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
@@ -31,7 +32,7 @@ public class SwaggerConfiguration {
     public Docket configSpringfoxDocketForAll() {
         ParameterBuilder tokenPar = new ParameterBuilder();
         List<Parameter> pars = new ArrayList<>();
-        tokenPar.name("Authorization").description("令牌").modelRef(new ModelRef("string")).parameterType("header").required(false).build();
+        tokenPar.name("Authorization").description("权限验证令牌").modelRef(new ModelRef("string")).parameterType("header").required(false).build();
         pars.add(tokenPar.build());
         return new Docket(DocumentationType.SWAGGER_2)
                 .produces(Sets.newHashSet("application/json","application/x-www-form-urlencoded","*/*"))
@@ -49,8 +50,7 @@ public class SwaggerConfiguration {
         return new ApiInfoBuilder()
                 .title("接口调用文档")
                 .description("前后端调试对接文档")
-                .termsOfServiceUrl("http://www.seawaterbt.com")
-                //.contact(new Contact("海水不甜","http://www.seawaterbt.com","809318068@qq.com"))
+                .contact(new Contact("liuxinghong","","349695133@qq.com"))
                 .version("2.0")
                 .build();
     }
