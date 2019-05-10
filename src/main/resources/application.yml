@@ -9,20 +9,12 @@ spring:
   application:
     name: spring-demo
 
-security:
-  basic:
-    enabled: false
-  oauth2:
-    client:
-      access-token-uri: http://localhost:8090/auth/oauth/token
-      user-authorization-uri: http://localhost:8090/auth/oauth/authorize
-    resource:
-      token-info-uri: http://localhost:8090/auth/user
 
-proxy:
-  auth:
-    routes:
-      auth-server: oauth2
+
+
+logging:
+  level:
+    org.springframework: debug
 
 
 
@@ -69,7 +61,6 @@ mybatis-plus:
     cache-enabled: false
 
 #此处配置用于生成token及token校验凭证
-jwt_token_key: spring-boot-demo
 
 
 
