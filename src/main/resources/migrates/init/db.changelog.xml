@@ -10,7 +10,7 @@
                    DROP TABLE IF EXISTS `sys_log`;
 
                 CREATE TABLE `sys_log` (
-                  `id` bigint(20) unsigned NOT NULL COMMENT '日志信息表主键',
+                  `id` varchar(20)  NOT NULL COMMENT '日志信息表主键',
                   `type` int(4) DEFAULT NULL COMMENT '日志类型（1:增，2:删，3:改，4:查）',
                   `desc` varchar(512) DEFAULT NULL COMMENT '日志说明（日志数据）',
                   `remark` varchar(512) DEFAULT NULL COMMENT '操作详情',
@@ -24,8 +24,8 @@
                 DROP TABLE IF EXISTS `sys_res`;
 
                 CREATE TABLE `sys_res` (
-                  `id` bigint(20) unsigned NOT NULL,
-                  `pid` bigint(20) unsigned NOT NULL DEFAULT '0',
+                  `id` varchar(20)  NOT NULL,
+                  `pid` varchar(20)  NOT NULL DEFAULT '0',
                   `name` varchar(50) NOT NULL DEFAULT '' COMMENT '在vue中name表示路由名称，非vue是资源名称',
                   `permission` varchar(100) NOT NULL DEFAULT '',
                   `url` varchar(200) NOT NULL DEFAULT '' COMMENT 'vue中表示路由的path',
@@ -44,7 +44,7 @@
                 DROP TABLE IF EXISTS `sys_role`;
 
                 CREATE TABLE `sys_role` (
-                  `id` bigint(20) unsigned NOT NULL,
+                  `id` varchar(20)  NOT NULL,
                   `name` varchar(55) NOT NULL DEFAULT '',
                   `code` varchar(100) NOT NULL DEFAULT '',
                   `sort_num` int(10) unsigned NOT NULL DEFAULT '1',
@@ -58,9 +58,9 @@
                 DROP TABLE IF EXISTS `sys_role_res`;
 
                 CREATE TABLE `sys_role_res` (
-                  `id` bigint(20) unsigned NOT NULL,
-                  `res_id` bigint(20) unsigned NOT NULL,
-                  `role_id` bigint(20) unsigned NOT NULL,
+                  `id` varchar(20)  NOT NULL,
+                  `res_id` varchar(20)  NOT NULL,
+                  `role_id` varchar(20)  NOT NULL,
                   PRIMARY KEY (`id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='角色资源表';
 
@@ -68,18 +68,21 @@
                 DROP TABLE IF EXISTS `sys_user`;
 
                 CREATE TABLE `sys_user` (
-                  `id` bigint(20) unsigned NOT NULL,
+                  `id` varchar(20)  NOT NULL,
                   `login_name` varchar(100) NOT NULL DEFAULT '',
                   `pwd` char(60) NOT NULL DEFAULT '',
                   `salt` char(60) NOT NULL DEFAULT '',
                   `name` varchar(50) NOT NULL DEFAULT '',
                   `email` varchar(100) NOT NULL DEFAULT '',
                   `sex` tinyint(3) unsigned NOT NULL DEFAULT '1' COMMENT '1:男，0:女',
-                  `telephone` varchar(20) NOT NULL DEFAULT '' COMMENT '电话',
+                  `mobile_no` varchar(20) NOT NULL DEFAULT '' COMMENT '手机号',
+                  `weixin_id` varchar(20) NOT NULL DEFAULT '' COMMENT '微信号',
+                  `reg_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '注册时间',
                   `avatar` varchar(200) NOT NULL DEFAULT '' COMMENT '头像',
                   `status` tinyint(4) NOT NULL DEFAULT '1' COMMENT '1 可用 0 不可用 -1: 删除',
                   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
                   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+                  `client_id` varchar(20)  NOT NULL,
                   PRIMARY KEY (`id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户表';
 
@@ -87,42 +90,13 @@
                 DROP TABLE IF EXISTS `sys_user_role`;
 
                 CREATE TABLE `sys_user_role` (
-                  `id` bigint(20) unsigned NOT NULL,
-                  `user_id` bigint(20) unsigned NOT NULL,
-                  `role_id` bigint(20) unsigned NOT NULL,
+                  `id` varchar(20)  NOT NULL,
+                  `user_id` varchar(20)  NOT NULL,
+                  `role_id` varchar(20)  NOT NULL,
                   PRIMARY KEY (`id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户角色表';
 
 
-                DROP TABLE IF EXISTS `user`;
-
-                CREATE TABLE `user` (
-                  `id` bigint(20) unsigned NOT NULL COMMENT '主键id',
-                  `user_no` varchar(40) NOT NULL COMMENT '用户编码',
-                  `mobile_no` varchar(11) DEFAULT NULL COMMENT '手机号',
-                  `login_id` varchar(16) DEFAULT NULL COMMENT '登录用户名',
-                  `password` varchar(60) DEFAULT NULL COMMENT '登录密码',
-                  `weixin_id` varchar(100) DEFAULT NULL COMMENT '微信号',
-                  `reg_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '注册时间',
-                  `reg_term_id` varchar(50) DEFAULT NULL COMMENT '注册终端编码',
-                  `name` varchar(50) DEFAULT NULL COMMENT '姓名',
-                  `address` varchar(100) DEFAULT NULL COMMENT '通信地址',
-                  `email` varchar(100) DEFAULT NULL COMMENT '电子邮箱',
-                  `photo_addr` varchar(100) DEFAULT NULL COMMENT '头像地址',
-                  `birthday` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '生日',
-                  `idcard_no` varchar(30) DEFAULT NULL COMMENT '身份证号码',
-                  `driver_no` varchar(30) DEFAULT NULL COMMENT '驾驶证号码',
-                  `driver_img1` varchar(100) DEFAULT NULL COMMENT '驾驶证图片-正本',
-                  `driver_img2` varchar(100) DEFAULT NULL COMMENT '驾驶证图片-副本',
-                  `integral` tinyint(20) DEFAULT '0' COMMENT '积分数',
-                  `sms_push_flag` tinyint(4) DEFAULT '1' COMMENT '短信推送标志. 0-关闭  1-打开',
-                  `nocensce_flag` tinyint(4) DEFAULT '1' COMMENT '无感支付开关. 0-关闭  1-打开',
-                  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-                  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-                  `status` tinyint(4) DEFAULT '2' COMMENT '状态，1 未删除，0 禁用，-1 删除，2 启用',
-                  `client_id` bigint(20) unsigned DEFAULT NULL COMMENT '客户id',
-                  PRIMARY KEY (`id`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='app用户表';
 
             ]]>
         </sql>

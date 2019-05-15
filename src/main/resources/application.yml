@@ -1,11 +1,23 @@
 server:
   port: 8090
-  servlet:
-    context-path: /sb
+#  servlet:
+#    context-path: /sb
 
 spring:
   profiles:
     active: local
+  application:
+    name: spring-demo
+
+
+
+
+logging:
+  level:
+    org.springframework: debug
+
+
+
 liquibase:
   path: classpath:migrates/master.xml
   #配置文件上传支持文件大小
@@ -47,6 +59,8 @@ mybatis-plus:
   configuration:
     map-underscore-to-camel-case: true
     cache-enabled: false
+
+#此处配置用于生成token及token校验凭证
 
 
 

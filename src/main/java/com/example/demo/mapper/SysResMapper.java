@@ -4,6 +4,9 @@ package com.example.demo.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.demo.entity.SysRes;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -15,5 +18,7 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface SysResMapper extends BaseMapper<SysRes> {
+
+    List<SysRes> findMenuByRoleCode(@Param("roleCode") List<String> roleCode);
 
 }
