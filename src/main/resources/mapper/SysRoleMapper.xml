@@ -8,6 +8,7 @@
         <result column="name" property="name" />
         <result column="code" property="code" />
         <result column="sort_num" property="sortNum" />
+        <result column="type" property="type"/>
         <result column="des" property="des" />
         <result column="status" property="status" />
         <result column="create_time" property="createTime" />

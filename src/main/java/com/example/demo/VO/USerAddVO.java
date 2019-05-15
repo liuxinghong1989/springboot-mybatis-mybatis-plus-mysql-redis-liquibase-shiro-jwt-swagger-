@@ -31,12 +31,12 @@ public class USerAddVO implements Serializable {
      * 登录用户名
      */
     @ApiModelProperty("用户名")
-    private String loginId;
+    private String loginName;
     /**
      * 登录密码
      */
     @ApiModelProperty("密码")
-    private String password;
+    private String pwd;
     /**
      * 微信号
      */

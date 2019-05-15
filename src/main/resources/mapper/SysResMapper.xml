@@ -25,4 +25,17 @@
         id, pid, name, permission, url, sort_num AS sortNum, icon1, icon2, pids, type, des, status, create_time AS createTime, update_time AS updateTime
     </sql>
 
+    <!-- 根据角色查询菜单 -->
+    <select id="findMenuByRoleCode" resultMap="BaseResultMap">
+        select m.* from sys_res m LEFT JOIN sys_role_res r on r.res_id= m.id
+        WHERE
+        m.status =1
+        <if test=" roleCode !=null and roleCode !=''">
+            r.role_id in
+        <foreach collection="roleCode" item="id" open="(" close=")" separator="," index="index">
+            #{roleCode}
+        </foreach>
+        </if>
+    </select>
+
 </mapper>

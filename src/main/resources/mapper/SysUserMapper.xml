@@ -9,18 +9,27 @@
         <result column="pwd" property="pwd" />
         <result column="salt" property="salt" />
         <result column="name" property="name" />
+        <result column="user_no" property="userNo"/>
         <result column="email" property="email" />
         <result column="sex" property="sex" />
-        <result column="telephone" property="telephone" />
+        <result column="mobile_no" property="mobileNo" />
         <result column="avatar" property="avatar" />
         <result column="status" property="status" />
         <result column="create_time" property="createTime" />
         <result column="update_time" property="updateTime" />
+        <result column="weixin_id" property="weixinId"/>
+        <result column="reg_time" property="regTime"/>
+        <result column="client_id" property="clientId"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id, login_name AS loginName, pwd, salt, name, email, sex, telephone, avatar, status, create_time AS createTime, update_time AS updateTime
     </sql>
+
+
+    <select id="selectByParam"  resultMap="BaseResultMap">
+      select  * from  sys_user order by id
+    </select>
 
 </mapper>
