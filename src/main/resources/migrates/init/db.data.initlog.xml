@@ -5,7 +5,7 @@
                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
 
 
-    <changeSet id="init-sys_res-data-add-scan_device_status" author="alex" runOnChange="true">
+    <changeSet id="init-sys_user_init" author="alex" runOnChange="true">
         <comment>
 
         </comment>

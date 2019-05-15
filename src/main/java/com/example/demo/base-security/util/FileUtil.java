@@ -329,10 +329,10 @@ public class FileUtil {
         if (type==Constant.FileType.FIVE_OFFICE) {
             str.append(Constant.FileType.FIVE_OFFICE_DIR);
         }
-        str.append(DateTimeUtil.formatDatetoString(time));
+        str.append(com.example.demo.security.util.DateTimeUtil.formatDatetoString(time));
         str.append("/");
         str.append(System.currentTimeMillis());
-        if(!ComUtil.isEmpty(tag)) {
+        if(!com.example.demo.security.util.ComUtil.isEmpty(tag)) {
             str.append(tag);
         }
         str.append(name.substring(name.indexOf(".")));

@@ -82,7 +82,7 @@
                   `status` tinyint(4) NOT NULL DEFAULT '1' COMMENT '1 可用 0 不可用 -1: 删除',
                   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
                   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
-                  `client_id` varchar(20)  NOT NULL,
+                  `client_id` varchar(20)  NOT NULL DEFAULT '',
                   PRIMARY KEY (`id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户表';
 

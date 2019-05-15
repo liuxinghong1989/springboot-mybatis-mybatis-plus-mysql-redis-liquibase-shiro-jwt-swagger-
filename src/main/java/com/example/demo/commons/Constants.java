@@ -44,10 +44,6 @@ public class Constants {
      */
     public static final String STRING_TOP_PARENT = "0";
 
-    /**
-     * 角色类型
-     */
-    public static final Integer ROLE_TYPE_ADMIN =0;
-    public static final Integer ROLE_TYPE_NORMAL =1;
+
 
 }

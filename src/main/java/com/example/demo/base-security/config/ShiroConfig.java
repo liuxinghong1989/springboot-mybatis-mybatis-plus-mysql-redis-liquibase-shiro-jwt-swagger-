@@ -54,7 +54,6 @@ public class ShiroConfig {
     @Bean("shiroFilter")
     public ShiroFilterFactoryBean factory(DefaultWebSecurityManager securityManager) {
         ShiroFilterFactoryBean factoryBean = new ShiroFilterFactoryBean();
-
         // 添加自己的过滤器并且取名为jwt
         Map<String, Filter> filterMap = new HashMap<>();
         filterMap.put("jwt", new JWTFilter());
@@ -77,6 +76,10 @@ public class ShiroConfig {
         filterRuleMap.put("/webjars/springfox-swagger-ui/**", "anon");
         // 所有请求通过我们自己的JWT Filter
         filterRuleMap.put("/**", "jwt");
+        //放行文件下载
+        filterRuleMap.put("/file/download/**");
+        //放行登出
+        filterRuleMap.put("/logout/**");
         factoryBean.setFilterChainDefinitionMap(filterRuleMap);
         return factoryBean;
     }

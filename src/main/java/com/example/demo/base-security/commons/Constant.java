@@ -62,14 +62,11 @@ public class Constant {
         public static final String FIVE_OFFICE_DIR= "/office/";
     }
 
-    public class RoleType{
-        //超级管理员
-        public static final String SYS_ASMIN_ROLE= "sysadmin";
-        //管理员
-        public static final String ADMIN= "admin";
-        //普通用户
-        public static final String USER= "user";
-    }
+    /**
+     * 角色类型
+     */
+    public static final Integer ROLE_TYPE_ADMIN =0;
+    public static final Integer ROLE_TYPE_NORMAL =1;
 
 
 }
