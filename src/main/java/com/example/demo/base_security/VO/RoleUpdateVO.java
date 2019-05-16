@@ -1,6 +1,5 @@
 package com.example.demo.base_security.VO;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
