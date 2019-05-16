@@ -5,11 +5,10 @@ import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.demo.entity.SysRoleRes;
 import com.example.demo.mapper.SysRoleResMapper;
-import com.example.demo.security.util.ComUtil;
+import com.example.demo.base_security.util.ComUtil;
 import com.example.demo.service.SysRoleResService;
 import org.springframework.stereotype.Service;
 
-import javax.management.Query;
 import java.util.ArrayList;
 import java.util.List;
 

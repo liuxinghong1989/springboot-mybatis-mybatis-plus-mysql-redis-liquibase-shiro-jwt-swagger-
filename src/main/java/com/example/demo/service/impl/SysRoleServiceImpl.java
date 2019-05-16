@@ -2,17 +2,16 @@ package com.example.demo.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.example.demo.VO.RoleAddVO;
-import com.example.demo.VO.RoleUpdateVO;
-import com.example.demo.commons.Constant;
-import com.example.demo.commons.Constants;
+import com.example.demo.base_security.VO.RoleAddVO;
+import com.example.demo.base_security.VO.RoleUpdateVO;
+import com.example.demo.base_security.commons.Constant;
 import com.example.demo.entity.SysRes;
 import com.example.demo.entity.SysRole;
 import com.example.demo.entity.SysRoleRes;
 import com.example.demo.entity.SysUserRole;
 import com.example.demo.mapper.SysRoleMapper;
-import com.example.demo.security.commons.PublicResultConstant;
-import com.example.demo.security.util.ComUtil;
+import com.example.demo.base_security.commons.PublicResultConstant;
+import com.example.demo.base_security.util.ComUtil;
 import com.example.demo.service.SysResService;
 import com.example.demo.service.SysRoleResService;
 import com.example.demo.service.SysRoleService;
@@ -62,7 +61,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     @Override
     public boolean updateRoleInfo(RoleUpdateVO roleModel) throws Exception{
         SysRole role1 = this.getById(roleModel.getId());
-        if (Constants.ROLE_TYPE_ADMIN.equals(role1.getType())){
+        if (Constant.ROLE_TYPE_ADMIN.equals(role1.getType())){
             throw  new RuntimeException(PublicResultConstant.UPDATE_SYSADMIN_INFO_ERROR);
         }
         if (ComUtil.isEmpty(role1)) {
@@ -93,7 +92,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
             List<String> ids = userToRole.stream().map(item -> item.getRoleId()).collect(Collectors.toList());
             List<SysRole> role = this.listByIds(ids).stream().collect(Collectors.toList());
             role.forEach(item->{
-                if(item.getType().equals(Constants.ROLE_TYPE_ADMIN)){
+                if(item.getType().equals(Constant.ROLE_TYPE_ADMIN)){
                     throw new RuntimeException(PublicResultConstant.UPDATE_SYSADMIN_INFO_ERROR);
                 }
 

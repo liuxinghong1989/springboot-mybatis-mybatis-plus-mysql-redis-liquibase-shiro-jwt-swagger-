@@ -69,6 +69,7 @@
 
                 CREATE TABLE `sys_user` (
                   `id` varchar(20)  NOT NULL,
+                   `user_no` varchar(20) NOT NULL DEFAULT '' COMMENT '用户编号',
                   `login_name` varchar(100) NOT NULL DEFAULT '',
                   `pwd` char(60) NOT NULL DEFAULT '',
                   `salt` char(60) NOT NULL DEFAULT '',

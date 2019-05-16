@@ -5,16 +5,16 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.example.demo.VO.registerVO;
-import com.example.demo.commons.Constant;
+import com.example.demo.base_security.VO.registerVO;
+import com.example.demo.base_security.commons.Constant;
 import com.example.demo.entity.SysRes;
 import com.example.demo.entity.SysUser;
 import com.example.demo.entity.SysUserRole;
 import com.example.demo.mapper.SysUserMapper;
-import com.example.demo.security.commons.PublicResultConstant;
-import com.example.demo.security.util.ComUtil;
-import com.example.demo.security.util.JWTUtil;
-import com.example.demo.security.util.StringUtil;
+import com.example.demo.base_security.commons.PublicResultConstant;
+import com.example.demo.base_security.util.ComUtil;
+import com.example.demo.base_security.util.JWTUtil;
+import com.example.demo.base_security.util.StringUtil;
 import com.example.demo.service.SysResService;
 import com.example.demo.service.SysRoleService;
 import com.example.demo.service.SysUserRoleService;
@@ -83,7 +83,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     @Override
-    public SysUser register(SysUser user, String roleCode) {
+    public SysUser register(SysUser user) {
         user.setId(IdWorker.getIdStr());
         user.setUserNo(user.getId());
         user.setCreateTime(DateTime.now().toDate());
@@ -122,10 +122,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
                 }
                 result.put("menuList",retMenuList);
                 result.put("buttonList",buttonList);
-                return result;
             }
         }
-        return null;
+        return result;
     }
 
     @Override
@@ -148,7 +147,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if(!StringUtil.checkMobileNumber(mobileNo)){
             throw new RuntimeException(PublicResultConstant.MOBILE_ERROR);
         }
-        SysUser user = this.getOne(new QueryWrapper<SysUser>().eq("mobile",mobileNo).eq("status",1));
+        SysUser user = this.getOne(new QueryWrapper<SysUser>().eq("mobile_no",mobileNo).eq("status",1));
         if (ComUtil.isEmpty(user) || !BCrypt.checkpw(requestJson.getString("pwd"), user.getPwd())) {
             throw new RuntimeException(PublicResultConstant.INVALID_USERNAME_PASSWORD);
         }
@@ -177,7 +176,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 //        }
         userRegister.setPwd(BCrypt.hashpw(vo.getPwd(), BCrypt.gensalt()));
         //默认注册普通用户
-        return this.register(userRegister, Constant.RoleType.USER);
+        return this.register(userRegister);
     }
 
     @Override

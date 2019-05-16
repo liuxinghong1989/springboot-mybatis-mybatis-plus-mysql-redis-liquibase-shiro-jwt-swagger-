@@ -2,8 +2,8 @@ package com.example.demo.service;
 
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.example.demo.VO.RoleAddVO;
-import com.example.demo.VO.RoleUpdateVO;
+import com.example.demo.base_security.VO.RoleAddVO;
+import com.example.demo.base_security.VO.RoleUpdateVO;
 import com.example.demo.entity.SysRole;
 
 import java.util.Map;

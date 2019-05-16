@@ -9,12 +9,9 @@ spring:
   application:
     name: spring-demo
 
-
-
-
 logging:
   level:
-    org.springframework: debug
+    org.springframework: info
 
 
 
@@ -60,7 +57,6 @@ mybatis-plus:
     map-underscore-to-camel-case: true
     cache-enabled: false
 
-#此处配置用于生成token及token校验凭证
 
 
 

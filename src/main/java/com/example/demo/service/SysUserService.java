@@ -4,7 +4,7 @@ package com.example.demo.service;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.example.demo.VO.registerVO;
+import com.example.demo.base_security.VO.registerVO;
 import com.example.demo.entity.SysUser;
 
 import java.util.Map;
@@ -33,10 +33,9 @@ public interface SysUserService extends IService<SysUser> {
     /**
      * 注册用户
      * @param user
-     * @param roleCode
      * @return
      */
-    SysUser register(SysUser user, String roleCode);
+    SysUser register(SysUser user);
 
     Map<String, Object> getLoginUserAndMenuInfo(SysUser user);
 

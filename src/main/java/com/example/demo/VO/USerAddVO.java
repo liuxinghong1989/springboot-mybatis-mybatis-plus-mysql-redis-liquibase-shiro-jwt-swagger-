@@ -32,6 +32,9 @@ public class USerAddVO implements Serializable {
      */
     @ApiModelProperty("用户名")
     private String loginName;
+
+    @ApiModelProperty("姓名")
+    private String name;
     /**
      * 登录密码
      */

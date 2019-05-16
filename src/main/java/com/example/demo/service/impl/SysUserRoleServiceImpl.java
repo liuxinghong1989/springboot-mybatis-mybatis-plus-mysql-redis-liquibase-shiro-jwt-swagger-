@@ -4,11 +4,10 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.demo.entity.SysUserRole;
 import com.example.demo.mapper.SysUserRoleMapper;
-import com.example.demo.security.util.ComUtil;
+import com.example.demo.base_security.util.ComUtil;
 import com.example.demo.service.SysUserRoleService;
 import org.springframework.stereotype.Service;
 
-import javax.management.Query;
 import java.util.List;
 
 /**
