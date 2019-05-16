@@ -6,6 +6,8 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
@@ -16,8 +18,11 @@ import java.util.Date;
  */
 public class JWTUtil {
 
-    // 过期时间1天
-    private static final long EXPIRE_TIME = 24*60*60*1000;
+
+    private  static  StringRedisTemplate redisTemplate = new StringRedisTemplate();
+
+    // 过期时间15天
+    private static final long EXPIRE_TIME = 15*24*60*60*1000;
 
     /**
      * 校验token是否正确
@@ -78,11 +83,13 @@ public class JWTUtil {
             Date date = new Date(System.currentTimeMillis()+EXPIRE_TIME);
             Algorithm algorithm = Algorithm.HMAC256(secret);
             // 附带用户id信息
-            String token = JWT.create()
+            String token = "Bearer "+JWT.create()
                     .withClaim("id", id)
                     .withExpiresAt(date)
                     .sign(algorithm);
-            return "Bearer "+token;
+            //存放在redis里面
+            redisTemplate.opsForValue().set(String.valueOf(id),token);
+            return token;
         } catch (UnsupportedEncodingException e) {
             return null;
         }

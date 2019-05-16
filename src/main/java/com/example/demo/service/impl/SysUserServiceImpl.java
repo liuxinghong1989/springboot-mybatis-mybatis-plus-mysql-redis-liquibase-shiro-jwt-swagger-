@@ -19,6 +19,7 @@ import com.example.demo.service.SysResService;
 import com.example.demo.service.SysRoleService;
 import com.example.demo.service.SysUserRoleService;
 import com.example.demo.service.SysUserService;
+import com.example.demo.utils.CurrentUserUtils;
 import com.google.common.collect.Sets;
 import org.apache.commons.collections4.CollectionUtils;
 import org.joda.time.DateTime;
@@ -68,6 +69,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         Page<SysUser> pageInfo = new Page<>(pageNO, pageSize);//创建分页
         List<SysUser> list = userMapper.selectByParam(pageInfo);
         pageInfo.setRecords(list);
+        SysUser user = CurrentUserUtils.getUser();
+
         return pageInfo;
 
     }
