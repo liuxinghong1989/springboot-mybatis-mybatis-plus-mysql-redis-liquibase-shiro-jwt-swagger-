@@ -34,7 +34,6 @@ public class LoginController extends BaseController {
     @ApiOperation(value="手机密码登录", notes="body体参数,不需要Authorization",produces = "application/json")
     @PostMapping("/login")
     @Log(action="SignIn",modelName= "Login",description="前台密码登录接口")
-    @Pass
     public Object login(
             @ValidationParam("mobileNo,pwd")@RequestBody JSONObject requestJson) throws Exception{
         return success(userService.checkMobileAndPasswd(requestJson));
@@ -43,7 +42,6 @@ public class LoginController extends BaseController {
     @ApiOperation(value="短信验证码登录", notes="body体参数,不需要Authorization",produces = "application/json")
     @PostMapping("/login/captcha")
     @Log(action="SignInByCaptcha",modelName= "Login",description="前台短信验证码登录接口")
-    @Pass
     public Object loginBycaptcha(
             @ValidationParam("mobile,captcha")@RequestBody JSONObject requestJson) throws Exception{
         return success( userService.checkMobileAndCatcha(requestJson));
@@ -54,22 +52,14 @@ public class LoginController extends BaseController {
     @ApiOperation(value="手机验证码注册", notes="body体参数,不需要Authorization",produces = "application/json")
     @PostMapping("/register")
     @Log(action="register",modelName= "Login",description="注册接口")
-    @Pass
     public Object register(@Validated @RequestBody registerVO vo)throws Exception {
         return success( userService.checkAndRegisterUser(vo));
     }
 
 
     @ApiOperation(value="忘记密码", notes="body体参数,不需要Authorization",produces = "application/json")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "requestJson", value = "{\"mobile\":\"17765071662\",\"captcha\":\"5780\",</br>" +
-                    "\"password\":\"123456\",\"rePassword\":\"123456\"}"
-                    , required = true, dataType = "String",paramType="body")
-    })
     @PostMapping("/forget/password")
-    @Pass
-    public Object resetPassWord (@ValidationParam("mobile,captcha,password,rePassword")
-                                               @RequestBody JSONObject requestJson ) throws Exception{
+    public Object resetPassWord (@RequestBody JSONObject requestJson ) throws Exception{
         return success(userService.updateForgetPasswd(requestJson));
     }
 
@@ -80,7 +70,6 @@ public class LoginController extends BaseController {
      * @throws Exception
      */
     @GetMapping("/check/mobile")
-    @Pass
     @ApiIgnore
     public Object loginBycaptcha(@RequestParam("mobile") String mobile) throws Exception{
         SysUser user = userService.getUserByMobile(mobile);

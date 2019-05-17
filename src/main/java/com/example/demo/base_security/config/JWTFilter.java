@@ -8,6 +8,7 @@ import com.example.demo.service.SysUserService;
 import com.example.demo.base_security.util.ComUtil;
 import com.example.demo.base_security.util.JWTUtil;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -77,8 +78,8 @@ public class JWTFilter extends BasicHttpAuthenticationFilter{
         if (this.userService == null) {
             this.userService = SpringContextBeanService.getBean(SysUserService.class);
         }
-        String userNo =  JWTUtil.getUserNo(token.getPrincipal().toString());
-        SysUser userBean = userService.getById(userNo);
+        String userId =  JWTUtil.getUserNo(token.getPrincipal().toString());
+        SysUser userBean = userService.getById(userId);
         request.setAttribute("currentUser", userBean);
     }
 
@@ -98,9 +99,9 @@ public class JWTFilter extends BasicHttpAuthenticationFilter{
             return false;
         }
         String authorization = httpServletRequest.getHeader("Authorization");
-//        if (verificationPassAnnotation(request, response, httpServletRequest, authorization)){
-//            return true;
-//        }
+        if (verificationPassAnnotation(request, response, httpServletRequest, authorization)){
+            return true;
+        }
         if(ComUtil.isEmpty(authorization)){
             responseError(request, response);
             return false;
@@ -182,7 +183,7 @@ public class JWTFilter extends BasicHttpAuthenticationFilter{
             response.setCharacterEncoding("utf-8");
             out = response.getWriter();
             response.setContentType("application/json; charset=utf-8");
-            out.print(JSONObject.toJSONString(ResponseHelper.validationFailure(PublicResultConstant.UNAUTHORIZED)));
+            out.print(JSONObject.toJSONString(ResponseHelper.unauthorized(PublicResultConstant.UNAUTHORIZED)));//401
             out.flush();
         } catch (Exception e) {
             e.printStackTrace();

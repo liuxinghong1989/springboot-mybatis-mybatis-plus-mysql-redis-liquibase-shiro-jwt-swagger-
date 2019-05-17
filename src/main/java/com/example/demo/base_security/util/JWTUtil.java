@@ -7,22 +7,38 @@ import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.io.UnsupportedEncodingException;
+import java.sql.Savepoint;
 import java.util.Date;
 
 /**
  * @author liugh
  * @since 2018-05-07
  */
+@Component
 public class JWTUtil {
+    private static RedisTemplate redisTemplate;
+    @Autowired
+    public void setRedisTemplate(RedisTemplate redisTemplate) {
+        JWTUtil.redisTemplate = redisTemplate;
+    }
 
-
-    private  static  StringRedisTemplate redisTemplate = new StringRedisTemplate();
-
-    // 过期时间15天
-    private static final long EXPIRE_TIME = 15*24*60*60*1000;
+    // 过期时间(秒)
+    private static Long expireTime;
+    @Value("${expireTime}")
+    private void  getTime(Long expireTime){
+        JWTUtil.expireTime =expireTime;
+    }
+  //  private static final long EXPIRE_TIME = 15*24*60*60*1000;
 
     /**
      * 校验token是否正确
@@ -30,7 +46,7 @@ public class JWTUtil {
      * @param secret 用户的密码
      * @return 是否正确
      */
-    public static boolean verify(String token, String userNo, String secret) {
+    public static boolean verify(String token, String userNo,String loginName, String secret) {
         try {
             if (StringUtils.startsWith(token,"Bearer") || StringUtils.startsWith(token,"bearer")){
                 String resultToken;
@@ -42,6 +58,7 @@ public class JWTUtil {
                 Algorithm algorithm = Algorithm.HMAC256(secret);
                 JWTVerifier verifier = JWT.require(algorithm)
                         .withClaim("id", userNo)
+                        .withClaim("loginName",loginName)
                         .build();
                 verifier.verify(resultToken);
                 return true;
@@ -78,24 +95,29 @@ public class JWTUtil {
      * @param secret 用户的密码
      * @return 加密的token
      */
-    public static String sign(String id, String secret) {
+    public static String sign(String id,String loginName, String secret) {
         try {
-            Date date = new Date(System.currentTimeMillis()+EXPIRE_TIME);
+            Date date = new Date(System.currentTimeMillis()+expireTime);
             Algorithm algorithm = Algorithm.HMAC256(secret);
             // 附带用户id信息
             String token = "Bearer "+JWT.create()
                     .withClaim("id", id)
+                    .withClaim("loginName",loginName)
                     .withExpiresAt(date)
                     .sign(algorithm);
             //存放在redis里面(实现单端登录)
-            Object token1 = redisTemplate.opsForHash().get("token", id);
-            if (null != token1 && StringUtils.isNotBlank(String.valueOf(token1))){
-                redisTemplate.opsForHash().delete("token",id);
-            }
-            redisTemplate.opsForHash().put("token",id,token);
+            saveRedis(id,token);
             return token;
         } catch (UnsupportedEncodingException e) {
             return null;
         }
+    }
+
+    private static void saveRedis(String id, String token) {
+        Object token1 = redisTemplate.opsForHash().get("token", id);
+        if (null != token1 && StringUtils.isNotBlank(String.valueOf(token1))){
+            redisTemplate.opsForHash().delete("token",id);
+        }
+        redisTemplate.opsForHash().put("token",id,token);
     }
 }

@@ -12,18 +12,31 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.Resource;
 
 /**
  * @author liugh
  * @since 2018-05-03
  */
+@Configuration
 public class MyRealm extends AuthorizingRealm {
     private SysUserService sysUserService;
     private SysUserRoleService userToRoleService;
     private SysResService menuService;
     private SysRoleService roleService;
-    private  static StringRedisTemplate redisTemplate = new StringRedisTemplate();
+
+    private static RedisTemplate redisTemplate;
+    @Autowired
+    public void setRedisTemplate(RedisTemplate redisTemplate) {
+        MyRealm.redisTemplate = redisTemplate;
+    }
+
     /**
      * 大坑！，必须重写此方法，不然Shiro会报错
      */
@@ -100,7 +113,7 @@ public class MyRealm extends AuthorizingRealm {
         if (userBean == null) {
             throw new UnauthorizedException("User didn't existed!");
         }
-        if (! JWTUtil.verify(token, userNo, userBean.getPwd())) {
+        if (! JWTUtil.verify(token, userNo,userBean.getLoginName(), userBean.getPwd())) {
             throw new UnauthorizedException("Username or password error");
         }
         return new SimpleAuthenticationInfo(token, token, this.getName());

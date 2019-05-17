@@ -10,7 +10,7 @@ spring:
 
   redis:
     database: 3
-    host: 18.136.204.238
+    host: 192.168.60.182
     port: 6379
     password: root
   cache:

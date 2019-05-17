@@ -10,7 +10,7 @@ public class PublicResultConstant {
 
     public static final String SUCCEED = "操作成功";
 
-    public static final String UNAUTHORIZED  = "获取登录用户信息失败";
+    public static final String UNAUTHORIZED  = "登录验证失败,请重新登录";
 
     public static final String ERROR  = "操作失败";
 

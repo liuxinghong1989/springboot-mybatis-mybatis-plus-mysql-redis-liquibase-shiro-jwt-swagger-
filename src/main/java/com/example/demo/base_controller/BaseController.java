@@ -7,6 +7,7 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.authz.UnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
@@ -123,12 +124,18 @@ public class BaseController {
                 String message = StringUtils.isEmpty(ex.getMessage()) ? ex.getCause().getMessage() : ex.getMessage();
                 map.put("msg",message);
             }
+        }else  if(ex instanceof UnauthorizedException) {//登录权限异常
+            status = HttpStatus.UNAUTHORIZED.value();
+            map.put("code", HttpStatus.UNAUTHORIZED.value());
+            String message = StringUtils.isEmpty(ex.getMessage()) ? ex.getCause().getMessage() : ex.getMessage();
+            map.put("msg",message);
         }else  if(ex instanceof RuntimeException) {
             status = HttpStatus.INTERNAL_SERVER_ERROR.value();
             map.put("code", HttpStatus.INTERNAL_SERVER_ERROR.value());
             String message = StringUtils.isEmpty(ex.getMessage()) ? ex.getCause().getMessage() : ex.getMessage();
             map.put("msg",message);
         }
+
 
         if(status == 0) {
             status = HttpStatus.INTERNAL_SERVER_ERROR.value();

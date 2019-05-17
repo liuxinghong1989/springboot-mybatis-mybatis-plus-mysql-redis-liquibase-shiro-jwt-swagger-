@@ -113,7 +113,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     public Map<String, Object> getLoginUserAndMenuInfo(SysUser user) {
         Map<String, Object> result = new HashMap<>();
         List<SysUserRole> userToRoleList = sysUserRoleService.selectByUserNo(user.getId());
-        String token = JWTUtil.sign(user.getId(), user.getPwd());
+        String token = JWTUtil.sign(user.getId(),user.getLoginName(), user.getPwd());
         result.put("token", token);
         result.put("user", user);
         List<SysRes> buttonList = new ArrayList<>();
