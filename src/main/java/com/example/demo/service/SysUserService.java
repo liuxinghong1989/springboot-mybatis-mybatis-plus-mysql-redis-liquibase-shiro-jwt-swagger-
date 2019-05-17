@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.demo.base_security.VO.registerVO;
 import com.example.demo.entity.SysUser;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 /**
@@ -54,4 +55,7 @@ public interface SysUserService extends IService<SysUser> {
     void resetMobile(SysUser currentUser, JSONObject requestJson)throws Exception;
 
     void resetPassWord(SysUser currentUser, JSONObject requestJson)throws Exception;
+
+    boolean loginOut(String userId);
+
 }

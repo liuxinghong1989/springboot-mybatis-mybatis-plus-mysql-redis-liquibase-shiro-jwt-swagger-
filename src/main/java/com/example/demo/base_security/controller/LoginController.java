@@ -18,6 +18,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  *  登录接口
  * @author liugh
@@ -47,8 +49,6 @@ public class LoginController extends BaseController {
         return success( userService.checkMobileAndCatcha(requestJson));
     }
 
-
-
     @ApiOperation(value="手机验证码注册", notes="body体参数,不需要Authorization",produces = "application/json")
     @PostMapping("/register")
     @Log(action="register",modelName= "Login",description="注册接口")
@@ -62,7 +62,6 @@ public class LoginController extends BaseController {
     public Object resetPassWord (@RequestBody JSONObject requestJson ) throws Exception{
         return success(userService.updateForgetPasswd(requestJson));
     }
-
     /**
      * 检查用户是否注册过
      * @param mobile
@@ -74,5 +73,16 @@ public class LoginController extends BaseController {
     public Object loginBycaptcha(@RequestParam("mobile") String mobile) throws Exception{
         SysUser user = userService.getUserByMobile(mobile);
         return success(!ComUtil.isEmpty(user));
+    }
+
+    /**
+     * 退出登录
+     * @return
+     */
+    @GetMapping("/loginOut")
+    public Object loginOut(@RequestParam("userId") String userId, HttpServletRequest request){
+        //将将当前请求头设置为null
+        request.setAttribute("currentUser",null);
+        return success(userService.loginOut(userId));
     }
 }
