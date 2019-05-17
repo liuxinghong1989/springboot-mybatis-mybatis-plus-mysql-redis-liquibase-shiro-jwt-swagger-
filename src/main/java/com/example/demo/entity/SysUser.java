@@ -4,8 +4,7 @@ import java.util.Date;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.Data;
-import lombok.ToString;
+import lombok.*;
 
 import java.io.Serializable;
 
@@ -19,7 +18,10 @@ import java.io.Serializable;
  */
 @TableName("sys_user")
 @Data
+@Builder
 @ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class SysUser implements Serializable {
 
     private static final long serialVersionUID = 1L;

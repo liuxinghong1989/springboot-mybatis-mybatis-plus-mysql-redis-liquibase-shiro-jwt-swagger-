@@ -87,8 +87,12 @@ public class JWTUtil {
                     .withClaim("id", id)
                     .withExpiresAt(date)
                     .sign(algorithm);
-            //存放在redis里面
-            redisTemplate.opsForValue().set(String.valueOf(id),token);
+            //存放在redis里面(实现单端登录)
+            Object token1 = redisTemplate.opsForHash().get("token", id);
+            if (null != token1 && StringUtils.isNotBlank(String.valueOf(token1))){
+                redisTemplate.opsForHash().delete("token",id);
+            }
+            redisTemplate.opsForHash().put("token",id,token);
             return token;
         } catch (UnsupportedEncodingException e) {
             return null;

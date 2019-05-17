@@ -41,10 +41,6 @@ public class LoginController extends BaseController {
     }
 
     @ApiOperation(value="短信验证码登录", notes="body体参数,不需要Authorization",produces = "application/json")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "requestJson", value = "{\"mobile\":\"13888888888\",\"captcha\":\"5780\"}"
-                    , required = true, dataType = "String",paramType="body")
-    })
     @PostMapping("/login/captcha")
     @Log(action="SignInByCaptcha",modelName= "Login",description="前台短信验证码登录接口")
     @Pass

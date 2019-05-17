@@ -2,6 +2,7 @@ package com.example.demo.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Constants;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -28,9 +29,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.management.Query;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -47,6 +51,8 @@ import java.util.stream.Collectors;
 @Transactional
 public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements SysUserService {
 
+    @Value("${defaultPwd}")
+    private String defaultPwd;
     @Autowired
     private SysUserMapper userMapper;
 
@@ -59,7 +65,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     private SysResService menuService;
     @Autowired
     private SysUserRoleService sysUserRoleService;
-
 
     @Autowired
     private SysRoleService roleService;
@@ -82,7 +87,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     @Override
     public SysUser getUserByMobile(String mobile) {
-        return null;
+        QueryWrapper<SysUser> ew = new QueryWrapper<>();
+        ew.eq("mobile", mobile);
+        ew.eq("status", Constant.ENABLE);
+        return this.getOne(ew);
     }
 
     @Override
@@ -90,6 +98,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         user.setId(IdWorker.getIdStr());
         user.setUserNo(user.getId());
         user.setCreateTime(DateTime.now().toDate());
+        user.setStatus(Constant.ENABLE);
+        user.setCreateTime(DateTime.now().toDate());
+        user.setUpdateTime(DateTime.now().toDate());
         boolean result = this.save(user);
 //        if (result) {
 //            UserToRole userToRole  = UserToRole.builder().userNo(user.getUserNo()).roleCode(roleCode).build();
@@ -102,29 +113,29 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     public Map<String, Object> getLoginUserAndMenuInfo(SysUser user) {
         Map<String, Object> result = new HashMap<>();
         List<SysUserRole> userToRoleList = sysUserRoleService.selectByUserNo(user.getId());
-        String token =JWTUtil.sign(user.getId(), user.getPwd());
-        result.put("token",token);
-        result.put("user",user);
+        String token = JWTUtil.sign(user.getId(), user.getPwd());
+        result.put("token", token);
+        result.put("user", user);
         List<SysRes> buttonList = new ArrayList<>();
         //根据角色主键查询启用的菜单权限
-        if (CollectionUtils.isNotEmpty(userToRoleList)){
+        if (CollectionUtils.isNotEmpty(userToRoleList)) {
             List<String> roleIds = userToRoleList.stream().map(item -> item.getRoleId()).collect(Collectors.toList());
             List<SysRes> menuList = menuService.findMenuByRoleCode(roleIds);
             //去重
-            if (CollectionUtils.isNotEmpty(menuList)){
+            if (CollectionUtils.isNotEmpty(menuList)) {
                 HashSet<String> ids = Sets.newHashSet();
-                menuList.forEach(item->{
+                menuList.forEach(item -> {
                     ids.add(item.getId());
                 });
                 List<SysRes> sysRes = menuService.listByIds(ids).stream().collect(Collectors.toList());
                 List<SysRes> retMenuList = menuService.treeMenuList(Constant.ROOT_MENU, sysRes);
                 for (SysRes buttonMenu : menuList) {
-                    if(buttonMenu.getType() == Constant.TYPE_BUTTON){
+                    if (buttonMenu.getType() == Constant.TYPE_BUTTON) {
                         buttonList.add(buttonMenu);
                     }
                 }
-                result.put("menuList",retMenuList);
-                result.put("buttonList",buttonList);
+                result.put("menuList", retMenuList);
+                result.put("buttonList", buttonList);
             }
         }
         return result;
@@ -132,7 +143,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     @Override
     public void deleteByUserNo(String userId) throws Exception {
-
+        SysUser user = this.getById(userId);
+        if (ComUtil.isEmpty(user)) {
+            throw new RuntimeException(PublicResultConstant.INVALID_USER);
+        }
+        //todo: 暂未实现
     }
 
     @Override
@@ -144,13 +159,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     public Map<String, Object> checkMobileAndPasswd(JSONObject requestJson) throws Exception {
         String mobileNo = String.valueOf(requestJson.get("mobileNo"));
         String pwd = String.valueOf(requestJson.get("pwd"));
-        if (StringUtils.isBlank(mobileNo) || StringUtils.isBlank(pwd)){
-            throw  new RuntimeException("入参不能为空！");
+        if (StringUtils.isBlank(mobileNo) || StringUtils.isBlank(pwd)) {
+            throw new RuntimeException("入参不能为空！");
         }
-        if(!StringUtil.checkMobileNumber(mobileNo)){
+        if (!StringUtil.checkMobileNumber(mobileNo)) {
             throw new RuntimeException(PublicResultConstant.MOBILE_ERROR);
         }
-        SysUser user = this.getOne(new QueryWrapper<SysUser>().eq("mobile_no",mobileNo).eq("status",1));
+        SysUser user = this.getOne(new QueryWrapper<SysUser>().eq("mobile_no", mobileNo).eq("status", 1));
         if (ComUtil.isEmpty(user) || !BCrypt.checkpw(requestJson.getString("pwd"), user.getPwd())) {
             throw new RuntimeException(PublicResultConstant.INVALID_USERNAME_PASSWORD);
         }
@@ -159,14 +174,39 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     @Override
     public Map<String, Object> checkMobileAndCatcha(JSONObject requestJson) throws Exception {
-        return null;
+        String mobile = requestJson.getString("mobile");
+        if (!StringUtil.checkMobileNumber(mobile)) {
+            throw new RuntimeException(PublicResultConstant.MOBILE_ERROR);
+        }
+        SysUser user = this.getUserByMobile(mobile);
+        //如果不是启用的状态
+        if (!ComUtil.isEmpty(user) && user.getStatus() != Constant.ENABLE) {
+            throw new RuntimeException("该用户状态不是启用的!");
+        }
+        //todo:验证码校验 暂未处理
+//        List<SmsVerify> smsVerifies = smsVerifyService.getByMobileAndCaptchaAndType(mobile,
+//                requestJson.getString("captcha"), SmsSendUtil.SMSType.getType(SmsSendUtil.SMSType.AUTH.name()));
+//        if(ComUtil.isEmpty(smsVerifies)){
+//            throw new RuntimeException(PublicResultConstant.VERIFY_PARAM_ERROR);
+//        }
+//        if(SmsSendUtil.isCaptchaPassTime(smsVerifies.get(0).getCreateTime())){
+//            throw new RuntimeException(PublicResultConstant.VERIFY_PARAM_PASS);
+//        }
+        if (ComUtil.isEmpty(user)) {
+            //设置默认密码
+            SysUser userRegister = SysUser.builder().pwd(BCrypt.hashpw(defaultPwd, BCrypt.gensalt()))
+                    .mobileNo(mobile).loginName(mobile).build();
+            user = this.register(userRegister);
+        }
+        return this.getLoginUserAndMenuInfo(user);
     }
 
     @Override
     public SysUser checkAndRegisterUser(registerVO vo) throws Exception {
         //可直接转为java对象,简化操作,不用再set一个个属性
         SysUser userRegister = new SysUser();
-        BeanUtils.copyProperties(vo,userRegister);
+        BeanUtils.copyProperties(vo, userRegister);
+        //todo：验证码相关逻辑暂未处理
 
 //        List<SmsVerify> smsVerifies = smsVerifyService.getByMobileAndCaptchaAndType(userRegister.getMobile(),
 //                requestJson.getString("captcha"), SmsSendUtil.SMSType.getType(SmsSendUtil.SMSType.REG.name()));
@@ -185,7 +225,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public SysUser updateForgetPasswd(JSONObject requestJson) throws Exception {
         String mobile = requestJson.getString("mobile");
-        if(!StringUtil.checkMobileNumber(mobile)){
+        if (!StringUtil.checkMobileNumber(mobile)) {
             throw new RuntimeException(PublicResultConstant.MOBILE_ERROR);
         }
         if (!requestJson.getString("password").equals(requestJson.getString("rePassword"))) {
@@ -193,9 +233,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         }
         SysUser user = this.getUserByMobile(mobile);
         roleService.getRoleIsAdminByUserNo(user.getUserNo());
-        if(ComUtil.isEmpty(user)){
+        if (ComUtil.isEmpty(user)) {
             throw new RuntimeException(PublicResultConstant.INVALID_USER);
         }
+        //todo：短信验证码校验暂未设置
 //        List<SmsVerify> smsVerifies = smsVerifyService.getByMobileAndCaptchaAndType(mobile,
 //                requestJson.getString("captcha"), SmsSendUtil.SMSType.getType(SmsSendUtil.SMSType.FINDPASSWORD.name()));
 //        if(ComUtil.isEmpty(smsVerifies)){
@@ -204,20 +245,40 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 //        if(SmsSendUtil.isCaptchaPassTime(smsVerifies.get(0).getCreateTime())){
 //            throw new BusinessException(PublicResultConstant.VERIFY_PARAM_PASS);
 //        }
-        user.setPwd(BCrypt.hashpw(requestJson.getString("password"),BCrypt.gensalt()));
+        user.setPwd(BCrypt.hashpw(requestJson.getString("password"), BCrypt.gensalt()));
         this.updateById(user);
         return user;
     }
 
     @Override
     public void resetMobile(SysUser currentUser, JSONObject requestJson) throws Exception {
-
+        String newMobile = requestJson.getString("newMobile");
+        if (!StringUtil.checkMobileNumber(newMobile)) {
+            throw new RuntimeException(PublicResultConstant.MOBILE_ERROR);
+        }
+        /**todo: 短信验证码 暂未处置
+         List<SmsVerify> smsVerifies = smsVerifyService.getByMobileAndCaptchaAndType(newMobile,
+         requestJson.getString("captcha"), SmsSendUtil.SMSType.getType(SmsSendUtil.SMSType.MODIFYINFO.name()));
+         if(ComUtil.isEmpty(smsVerifies)){
+         throw  new RuntimeException(PublicResultConstant.VERIFY_PARAM_ERROR);
+         }
+         if(SmsSendUtil.isCaptchaPassTime(smsVerifies.get(0).getCreateTime())){
+         throw  new RuntimeException(PublicResultConstant.VERIFY_PARAM_PASS);
+         }
+         **/
+        currentUser.setMobileNo(newMobile);
+        this.updateById(currentUser);
     }
 
     @Override
     public void resetPassWord(SysUser currentUser, JSONObject requestJson) throws Exception {
-
+        if (!requestJson.getString("password").equals(requestJson.getString("rePassword"))) {
+            throw new RuntimeException(PublicResultConstant.INVALID_RE_PASSWORD);
+        }
+        if (!BCrypt.checkpw(requestJson.getString("oldPassword"), currentUser.getPwd())) {
+            throw new RuntimeException(PublicResultConstant.INVALID_USERNAME_PASSWORD);
+        }
+        currentUser.setPwd(BCrypt.hashpw(requestJson.getString("password"), BCrypt.gensalt()));
+        this.updateById(currentUser);
     }
-
-
 }

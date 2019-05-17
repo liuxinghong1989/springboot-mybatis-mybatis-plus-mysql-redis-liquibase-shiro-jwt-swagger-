@@ -57,6 +57,8 @@ mybatis-plus:
     map-underscore-to-camel-case: true
     cache-enabled: false
 
+#用户默认登录密码
+defaultPwd: 123456
 
 
 

@@ -4,6 +4,7 @@ import com.example.demo.base_security.commons.Constant;
 import com.example.demo.entity.SysUser;
 import com.example.demo.service.*;
 import com.example.demo.base_security.util.JWTUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
@@ -11,6 +12,7 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.springframework.data.redis.core.StringRedisTemplate;
 
 /**
  * @author liugh
@@ -21,6 +23,7 @@ public class MyRealm extends AuthorizingRealm {
     private SysUserRoleService userToRoleService;
     private SysResService menuService;
     private SysRoleService roleService;
+    private  static StringRedisTemplate redisTemplate = new StringRedisTemplate();
     /**
      * 大坑！，必须重写此方法，不然Shiro会报错
      */
@@ -81,10 +84,17 @@ public class MyRealm extends AuthorizingRealm {
         if(Constant.isPass){
             return new SimpleAuthenticationInfo(token, token, this.getName());
         }
-        // 解密获得username，用于和数据库进行对比
+        // 解密获得username，用于和redis和数据库进行对比
         String userNo = JWTUtil.getUserNo(token);
         if (userNo == null) {
             throw new UnauthorizedException("token invalid");
+        }
+        //实现单点登录
+        Object token1 = redisTemplate.opsForHash().get("token", userNo);
+        if (null !=token1 && StringUtils.isNotBlank(String.valueOf(token1))){
+           if (!token.equals(token1)){
+               throw new UnauthorizedException("登录重复，请重新登录");
+           }
         }
         SysUser userBean = sysUserService.getById(userNo);
         if (userBean == null) {
