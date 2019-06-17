@@ -1,6 +1,6 @@
 package com.example.demo.base_security.config;
 
-import com.example.demo.entity.SysUser;
+import com.example.demo.base_model.entity.SysUser;
 import com.example.demo.base_security.annotation.CurrentUser;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.springframework.core.MethodParameter;

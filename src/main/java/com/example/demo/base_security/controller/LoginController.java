@@ -1,15 +1,15 @@
 package com.example.demo.base_security.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.example.demo.base_controller.BaseController;
+import com.example.demo.base_model.entity.SysUser;
+import com.example.demo.base_model.service.SysUserService;
 import com.example.demo.base_security.VO.registerVO;
 import com.example.demo.base_security.captha.CaptchaClient;
 import com.example.demo.base_security.captha.bean.CaptchaBean;
-import com.example.demo.entity.SysUser;
 import com.example.demo.base_security.annotation.Log;
 import com.example.demo.base_security.annotation.ValidationParam;
 import com.example.demo.base_security.util.ComUtil;
-import com.example.demo.service.SysUserService;
+import com.example.demo.commons.BaseController;
 import com.google.common.collect.ImmutableMap;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

@@ -18,11 +18,11 @@
     <!-- 文件输出格式 -->
     <property name="PATTERN" value="%-12(%d{yyyy-MM-dd HH:mm:ss.SSS}) |-%-5level [%thread] %c [%L] -| %msg%n" />
     <!-- dev文件路径 -->
-    <property name="DEV_FILE_PATH" value="/mnt/nsop-admin/logs" />
+    <property name="DEV_FILE_PATH" value="/mnt/demo-dev/logs" />
     <!-- test文件路径 -->
-    <property name="TEST_FILE_PATH" value="/mnt/nsop-admin-test/logs" />
+    <property name="TEST_FILE_PATH" value="/mnt/demo-test/logs" />
     <!-- pro文件路径 -->
-    <property name="PRO_FILE_PATH" value="/mnt/nsop-admin/logs" />
+    <property name="PRO_FILE_PATH" value="/mnt/demo/logs" />
 
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>

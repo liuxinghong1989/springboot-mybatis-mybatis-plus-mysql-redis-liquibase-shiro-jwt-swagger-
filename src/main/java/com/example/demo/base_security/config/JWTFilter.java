@@ -1,10 +1,10 @@
 package com.example.demo.base_security.config;
 
 import com.alibaba.fastjson.JSONObject;
+import com.example.demo.base_model.entity.SysUser;
+import com.example.demo.base_model.service.SysUserService;
 import com.example.demo.base_security.commons.Constant;
-import com.example.demo.entity.SysUser;
 import com.example.demo.base_security.commons.PublicResultConstant;
-import com.example.demo.service.SysUserService;
 import com.example.demo.base_security.util.ComUtil;
 import com.example.demo.base_security.util.JWTUtil;
 import org.apache.commons.lang3.StringUtils;

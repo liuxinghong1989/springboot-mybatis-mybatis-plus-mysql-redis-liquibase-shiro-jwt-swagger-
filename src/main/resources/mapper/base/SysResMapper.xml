@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.SysResMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.example.demo.base_model.entity.SysRes">
+        <id column="id" property="id" />
+        <result column="pid" property="pid" />
+        <result column="name" property="name" />
+        <result column="permission" property="permission" />
+        <result column="url" property="url" />
+        <result column="sort_num" property="sortNum" />
+        <result column="icon1" property="icon1" />
+        <result column="icon2" property="icon2" />
+        <result column="pids" property="pids" />
+        <result column="type" property="type" />
+        <result column="des" property="des" />
+        <result column="status" property="status" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, pid, name, permission, url, sort_num AS sortNum, icon1, icon2, pids, type, des, status, create_time AS createTime, update_time AS updateTime
+    </sql>
+
+    <!-- 根据角色查询菜单 -->
+    <select id="findMenuByRoleCode" resultMap="BaseResultMap">
+        select m.* from sys_res m LEFT JOIN sys_role_res r on r.res_id= m.id
+        WHERE
+        m.status =1
+        <if test=" roleCode !=null and roleCode !=''">
+            r.role_id in
+        <foreach collection="roleCode" item="id" open="(" close=")" separator="," index="index">
+            #{roleCode}
+        </foreach>
+        </if>
+    </select>
+
+</mapper>

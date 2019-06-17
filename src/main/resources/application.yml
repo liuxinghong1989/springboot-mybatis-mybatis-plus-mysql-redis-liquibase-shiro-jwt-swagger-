@@ -5,7 +5,7 @@ server:
 
 spring:
   profiles:
-    active: local
+    active: dev
   application:
     name: spring-demo
 

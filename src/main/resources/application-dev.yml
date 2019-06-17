@@ -2,7 +2,7 @@
 spring:
   datasource:
     name: test
-    url: jdbc:mysql://18.136.204.238:3306/springboot_demo?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+    url: jdbc:mysql://18.136.204.238:3306/mp_aws?useUnicode=true&characterEncoding=UTF-8&useSSL=false
     username:
     password:
     type: com.alibaba.druid.pool.DruidDataSource
@@ -10,7 +10,7 @@ spring:
 
   redis:
     database: 2
-    host: 18.136.204.238
+    host:
     port: 6379
     password:
   cache:
