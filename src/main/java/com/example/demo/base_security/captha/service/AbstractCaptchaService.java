@@ -28,6 +28,7 @@ public abstract class AbstractCaptchaService implements ICaptchaService {
     Color color = new Color(253, 251, 255);
     boolean transform=false;
 
+    @Override
     public CaptchaBean generateCaptcha() {
         // 1.build image
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);

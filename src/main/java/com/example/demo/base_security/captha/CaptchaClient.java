@@ -15,6 +15,7 @@ import java.awt.*;
  * desc: (The role of this class is to ...)
  * To change this template use preferences | editor | File and code Templates
  */
+
 public class CaptchaClient {
     private SimpleCaptchaService simpleCaptchaService;
 

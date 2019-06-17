@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <!--引入默认的一些设置-->
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
+
+    <logger name="org.springframework.web" level="info"/>
+    <logger name="org.apache.ibatis" level="DEBUG"/>
+    <!--<logger name="org.apache.ibatis.common.jdbc.SimpleDataSource" level="DEBUG"/>-->
+    <logger name="org.apache.ibatis.jdbc.ScriptRunner" level="DEBUG"/>
+    <!--<logger name="com.ibatis.sqlmap.engine.impl.SqlMapClientDelegate" level="DEBUG"/>-->
+    <logger name="java.sql.Connection" level="DEBUG"/>
+    <logger name="java.sql.Statement" level="DEBUG"/>
+    <logger name="java.sql.PreparedStatement" level="DEBUG"/>
+    <logger name="com.example.demo" level="DEBUG"/>
+
+    <!-- 文件输出格式 -->
+    <property name="PATTERN" value="%-12(%d{yyyy-MM-dd HH:mm:ss.SSS}) |-%-5level [%thread] %c [%L] -| %msg%n" />
+    <!-- dev文件路径 -->
+    <property name="DEV_FILE_PATH" value="/mnt/nsop-admin/logs" />
+    <!-- test文件路径 -->
+    <property name="TEST_FILE_PATH" value="/mnt/nsop-admin-test/logs" />
+    <!-- pro文件路径 -->
+    <property name="PRO_FILE_PATH" value="/mnt/nsop-admin/logs" />
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+
+    <!-- 本地环境 -->
+    <springProfile name="local">
+        <root level="info">
+            <appender-ref ref="CONSOLE" />
+        </root>
+    </springProfile>
+    <!-- 开发环境 -->
+    <springProfile name="dev">
+        <root level="info">
+            <appender-ref ref="CONSOLE" />
+        </root>
+    </springProfile>
+
+    <!-- 线上开发环境 -->
+    <springProfile name="dev2">
+        <appender name="TEST-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <fileNamePattern>${DEV_FILE_PATH}/logback_%d{yyyy-MM-dd}.log</fileNamePattern>
+                <MaxHistory>30</MaxHistory>
+            </rollingPolicy>
+            <layout class="ch.qos.logback.classic.PatternLayout">
+                <pattern>${PATTERN}</pattern>
+            </layout>
+        </appender>
+        <root level="info">
+            <appender-ref ref="CONSOLE" />
+            <appender-ref ref="TEST-FILE" />
+        </root>
+    </springProfile>
+
+    <!-- 测试环境 -->
+    <springProfile name="test">
+        <appender name="TEST-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <fileNamePattern>${TEST_FILE_PATH}/logback_%d{yyyy-MM-dd}.log</fileNamePattern>
+                <MaxHistory>30</MaxHistory>
+            </rollingPolicy>
+            <layout class="ch.qos.logback.classic.PatternLayout">
+                <pattern>${PATTERN}</pattern>
+            </layout>
+        </appender>
+        <root level="info">
+            <appender-ref ref="CONSOLE" />
+            <appender-ref ref="TEST-FILE" />
+        </root>
+    </springProfile>
+
+    <!-- 生产环境 -->
+    <springProfile name="prod">
+        <appender name="PROD-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${PRO_FILE_PATH}/admin.log</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <fileNamePattern>${PRO_FILE_PATH}/logback_%d{yyyy-MM-dd}.log.zip</fileNamePattern>
+                <MaxHistory>30</MaxHistory>
+                <totalSizeCap>10GB</totalSizeCap>
+            </rollingPolicy>
+            <layout class="ch.qos.logback.classic.PatternLayout">
+                <pattern>${PATTERN}</pattern>
+            </layout>
+        </appender>
+        <!--异步到文件-->
+        <appender name="PROD-ASYNC-FILE" class="ch.qos.logback.classic.AsyncAppender">
+            <discardingThreshold>0</discardingThreshold>
+            <queueSize>500</queueSize>
+            <appender-ref ref="PROD-FILE"/>
+        </appender>
+        <root level="info">
+            <appender-ref ref="CONSOLE" />
+            <appender-ref ref="PROD-ASYNC-FILE" />
+        </root>
+    </springProfile>
+</configuration>

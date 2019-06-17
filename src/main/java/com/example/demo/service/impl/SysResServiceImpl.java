@@ -2,7 +2,7 @@ package com.example.demo.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.example.demo.commons.Constant;
+import com.example.demo.base_security.commons.Constant;
 import com.example.demo.entity.SysRes;
 import com.example.demo.mapper.SysResMapper;
 import com.example.demo.service.SysResService;
@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import javax.management.Query;
 import java.util.ArrayList;
 import java.util.List;
