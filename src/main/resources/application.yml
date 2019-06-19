@@ -1,7 +1,7 @@
 server:
   port: 8090
 #  servlet:
-#    context-path: /sb
+#    context-path: /demo
 
 spring:
   profiles:

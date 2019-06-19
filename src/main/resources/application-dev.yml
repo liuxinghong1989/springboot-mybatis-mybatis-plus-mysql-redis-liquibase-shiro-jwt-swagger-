@@ -15,5 +15,36 @@ spring:
     password:
   cache:
     type: redis
+# rabbitmq配置参数
+  rabbitmq:
+    host: 18.136.204.238
+    port: 5672
+    username:
+    password:
+    virtual-host: /demo
+    listener:
+      simple:
+        # 采用手动应答
+        acknowledge-mode: manual
+        # 当前监听容器数
+        concurrency: 1
+        # 最大数
+        max-concurrency: 1
+        # 是否支持重试
+        retry:
+          enabled: true
+    # 支持发布确认
+    publisher-confirms: true
+    # 支持发布返回
+    publisher-returns: true
+
+#队列配置信息(delayed为延时队列)
+rabbitmq:
+  delayed-queue-name: delayed-queue-name-dev
+  delayed-exchange-name: delay-exchange-dev
+  msg-send-exchange: msg-send-exchange-dev
+  msg-send-queue: msg-send-queue-dev
+
+
 
 
