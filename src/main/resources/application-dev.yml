@@ -3,25 +3,25 @@ spring:
   datasource:
     name: test
     url: jdbc:mysql://18.136.204.238:3306/mp_aws?useUnicode=true&characterEncoding=UTF-8&useSSL=false
-    username: root
-    password: root
+    username:
+    password:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.jdbc.Driver
 
   redis:
     database: 2
-    host: 18.136.204.238
+    host:
     port: 6379
     password:
   cache:
     type: redis
 # rabbitmq配置参数
   rabbitmq:
-    host: 18.136.204.238
+    host:
     port: 5672
-    username: lxh
-    password: lxh
-    virtual-host: /
+    username:
+    password:
+    virtual-host: /demo
     listener:
       simple:
         # 采用手动应答
@@ -40,7 +40,7 @@ spring:
 
 #队列配置信息(delayed为延时队列)
 rabbitmq:
-  delayed-queue-name: delayed-queue-name-dev
+  delayed-queue-name: delayed-queue-dev
   delayed-exchange-name: delay-exchange-dev
   msg-send-exchange: msg-send-exchange-dev
   msg-send-queue: msg-send-queue-dev

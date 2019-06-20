@@ -17,10 +17,15 @@ import java.io.IOException;
 @Component
 public class RabbitQueueListener {
 
+    /**
+     * 普通队列监听
+     * @param message
+     * @param channel
+     */
     @RabbitListener(queues = {"${rabbitmq.msg-send-queue}"})
         public void readMsg(Message message, Channel channel){
         try {
-            log.info(JSONObject.toJSONString(message.getBody()));
+            log.info("接收到的消息数据》》》："+JSONObject.toJSONString(new String(message.getBody())));
             //此处处理逻辑业务操作
         }catch (Exception e){
             log.error(e.getMessage());
@@ -43,10 +48,15 @@ public class RabbitQueueListener {
         }
     }
 
+    /**
+     * 延时队列监听
+     * @param message
+     * @param channel
+     */
     @RabbitListener(queues = {"${rabbitmq.delayed-queue-name}"})
     public void readDelayedMsg(Message message, Channel channel){
         try {
-            log.info(JSONObject.toJSONString(message.getBody()));
+            log.info("接收到的延时消息数据》》》："+JSONObject.toJSONString(new String(message.getBody())));
             //此处处理逻辑业务操作
         }catch (Exception e){
             log.error(e.getMessage());
@@ -59,12 +69,12 @@ public class RabbitQueueListener {
         }
         finally {
             //最终确认消息已消费（慎用次操作，操作后消息将不复存在）
-//            try {
-//                channel.basicAck(message.getMessageProperties().getDeliveryTag(), true);
-//            } catch (IOException e) {
-//                log.error(e.getMessage());
-//                e.printStackTrace();
-//            }
+            try {
+                channel.basicAck(message.getMessageProperties().getDeliveryTag(), true);
+            } catch (IOException e) {
+                log.error(e.getMessage());
+                e.printStackTrace();
+            }
 
         }
     }
