@@ -39,6 +39,7 @@ spring:
     publisher-returns: true
 
 #队列配置信息(delayed为延时队列)
+#创建延时队列时 必须要在服务器端 安装延时队列插件 参考：https://www.jianshu.com/p/8fe6947efa53
 rabbitmq:
   delayed-queue-name: delayed-queue-dev
   delayed-exchange-name: delay-exchange-dev

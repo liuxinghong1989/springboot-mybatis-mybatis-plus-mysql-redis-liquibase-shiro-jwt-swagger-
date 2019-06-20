@@ -27,7 +27,7 @@ public class RabbitMQConfig {
 
     /**
      * 延迟队列交换机定义
-     * todo： 创建延时队列时  必须要在服务器端 安装延时队列插件 参考：https://www.jianshu.com/p/8fe6947efa53
+     * todo： 创建延时队列时 必须要在服务器端 安装延时队列插件 参考：https://www.jianshu.com/p/8fe6947efa53
      * @return 返回交换机
      */
     @Bean
