@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
  * @Description: 项目启动后  执行该方法
  * @date 2019/6/20 002011:46
  */
-@Component
+//@Component
 public class RabbitMQTestComponent implements ApplicationListener<ContextRefreshedEvent> {
 
     @Autowired
