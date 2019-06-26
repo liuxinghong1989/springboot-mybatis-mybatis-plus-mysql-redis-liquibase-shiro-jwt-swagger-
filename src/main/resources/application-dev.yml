@@ -3,24 +3,24 @@ spring:
   datasource:
     name: test
     url: jdbc:mysql://18.136.204.238:3306/springboot_demo?useUnicode=true&characterEncoding=UTF-8&useSSL=false
-    username: root
-    password: root
+    username:
+    password:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.jdbc.Driver
 
   redis:
     database: 2
-    host: 18.136.204.238
+    host:
     port: 6379
     password:
   cache:
     type: redis
 # rabbitmq配置参数
   rabbitmq:
-    host: 18.136.204.238
+    host:
     port: 5672
-    username: lxh
-    password: lxh
+    username:
+    password:
     virtual-host: /demo
     listener:
       simple:
