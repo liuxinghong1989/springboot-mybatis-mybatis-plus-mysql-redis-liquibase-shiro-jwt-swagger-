@@ -12,7 +12,7 @@ spring:
     database: 2
     host: 18.136.204.238
     port: 6379
-    password:
+    password: root
   cache:
     type: redis
 # rabbitmq配置参数
