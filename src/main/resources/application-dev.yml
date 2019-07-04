@@ -17,7 +17,7 @@ spring:
     type: redis
 # rabbitmq配置参数
   rabbitmq:
-    host: 18.136.204.238
+    host: 106.12.55.131
     port: 5672
     username: lxh
     password: lxh
