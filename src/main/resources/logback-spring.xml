@@ -18,11 +18,13 @@
     <!-- 文件输出格式 -->
     <property name="PATTERN" value="%-12(%d{yyyy-MM-dd HH:mm:ss.SSS}) |-%-5level [%thread] %c [%L] -| %msg%n" />
     <!-- dev文件路径 -->
-    <property name="DEV_FILE_PATH" value="/mnt/demo-dev/logs" />
+    <property name="DEV_FILE_PATH" value="/mnt/springboot_demo/logs" />
+    <!-- dev2文件路径 -->
+    <property name="DEV2_FILE_PATH" value="/mnt/springboot_demo-dev/logs" />
     <!-- test文件路径 -->
-    <property name="TEST_FILE_PATH" value="/mnt/demo-test/logs" />
+    <property name="TEST_FILE_PATH" value="/mnt/springboot_demo-test/logs" />
     <!-- pro文件路径 -->
-    <property name="PRO_FILE_PATH" value="/mnt/demo/logs" />
+    <property name="PRO_FILE_PATH" value="/mnt/springboot_demo/logs" />
 
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
@@ -48,7 +50,7 @@
     <springProfile name="dev2">
         <appender name="TEST-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
             <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-                <fileNamePattern>${DEV_FILE_PATH}/logback_%d{yyyy-MM-dd}.log</fileNamePattern>
+                <fileNamePattern>${DEV2_FILE_PATH}/logback_%d{yyyy-MM-dd}.log</fileNamePattern>
                 <MaxHistory>30</MaxHistory>
             </rollingPolicy>
             <layout class="ch.qos.logback.classic.PatternLayout">
