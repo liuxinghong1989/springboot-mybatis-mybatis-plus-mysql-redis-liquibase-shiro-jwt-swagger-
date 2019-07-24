@@ -31,9 +31,13 @@ public class MessageTaskSend implements Serializable {
      */
     private Date deleteTime;
     /**
-     * 任务类型
+     * 任务类型(普通消息，延时消息)
      */
     private String taskType;
+    /**
+     * 延时时间（普通消息为空）
+     */
+    private Integer delayed;
     /**
      * 发送任务交换机名称
      */
