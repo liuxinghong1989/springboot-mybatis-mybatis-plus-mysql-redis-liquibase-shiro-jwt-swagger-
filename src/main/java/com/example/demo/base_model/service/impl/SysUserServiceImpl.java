@@ -72,8 +72,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         Page<SysUser> pageInfo = new Page<>(pageNO, pageSize);//创建分页
         List<SysUser> list = userMapper.selectByParam(pageInfo);
         pageInfo.setRecords(list);
-        SysUser user = CurrentUserUtils.getUser();
-
         return pageInfo;
 
     }
@@ -110,7 +108,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public Map<String, Object> getLoginUserAndMenuInfo(SysUser user) {
         Map<String, Object> result = new HashMap<>();
-        List<SysUserRole> userToRoleList = sysUserRoleService.selectByUserNo(user.getId());
+        List<SysUserRole> userToRoleList = sysUserRoleService.selectByUserId(user.getId());
         String token = JWTUtil.sign(user.getId(),user.getLoginName(), user.getPwd());
         result.put("token", token);
         result.put("user", user);
@@ -140,7 +138,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     @Override
-    public void deleteByUserNo(String userId) throws Exception {
+    public void deleteByUserId(String userId) throws Exception {
         SysUser user = this.getById(userId);
         if (ComUtil.isEmpty(user)) {
             throw new RuntimeException(PublicResultConstant.INVALID_USER);
@@ -230,7 +228,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             throw new RuntimeException(PublicResultConstant.INVALID_RE_PASSWORD);
         }
         SysUser user = this.getUserByMobile(mobile);
-        roleService.getRoleIsAdminByUserNo(user.getUserNo());
+        roleService.getRoleIsAdminByUserId(user.getId());
         if (ComUtil.isEmpty(user)) {
             throw new RuntimeException(PublicResultConstant.INVALID_USER);
         }

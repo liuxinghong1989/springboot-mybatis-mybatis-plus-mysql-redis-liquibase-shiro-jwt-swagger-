@@ -6,14 +6,13 @@ import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import java.io.Serializable;
 import java.util.Date;
-
 /**
  * 消息任务发送表(实现分布式事务最终一致性)
  */
 @Data
 @ToString
 @TableName(value = "xc_task")
-public class MessageTaskSend implements Serializable {
+public class RabbitMessageTaskSend implements Serializable {
 
     @Id
     private String id;

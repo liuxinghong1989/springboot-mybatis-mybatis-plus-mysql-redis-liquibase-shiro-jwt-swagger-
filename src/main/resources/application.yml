@@ -59,8 +59,8 @@ mybatis-plus:
 
 #用户默认登录密码
 defaultPwd: 123456
-#token过期时间：单位毫秒
-expireTime: 15000
+#token过期时间：单位秒
+expireTime: 1500
 
 
 

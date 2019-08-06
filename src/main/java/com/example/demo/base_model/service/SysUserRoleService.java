@@ -21,6 +21,6 @@ public interface SysUserRoleService extends IService<SysUserRole> {
      * @param id 用户ID
      * @return  结果
      */
-    List<SysUserRole> selectByUserNo(String id);
+    List<SysUserRole> selectByUserId(String id);
 
 }

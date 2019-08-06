@@ -102,5 +102,28 @@
             ]]>
         </sql>
     </changeSet>
+    <changeSet id="message" author="lxh">
+        <sql>
+            <![CDATA[
+            DROP TABLE IF EXISTS `message`;
+            CREATE TABLE `message` (
+            `id` varchar(32) NOT NULL,
+            `user_id` varchar(32) NOT NULL,
+            `corp_id` varchar(255) DEFAULT NULL,
+            `create_time` varchar(255) DEFAULT NULL,
+            `is_delete` int(11) DEFAULT NULL,
+            `update_time` varchar(255) DEFAULT NULL,
+            `category` varchar(255) DEFAULT NULL,
+            `extra` text,
+            `msg` varchar(1000) DEFAULT NULL,
+            `status` int(11) DEFAULT NULL,
+            `title` varchar(500) DEFAULT NULL,
+            `url` varchar(255) DEFAULT NULL,
+            PRIMARY KEY (`id`) USING BTREE
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='消息发送表';
+
+             ]]>
+        </sql>
+    </changeSet>
 
 </databaseChangeLog>

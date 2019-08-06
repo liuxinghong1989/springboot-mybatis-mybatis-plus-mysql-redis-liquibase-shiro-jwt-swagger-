@@ -3,12 +3,14 @@ package com.example.demo.base_security.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.example.demo.base_model.entity.SysUser;
 import com.example.demo.base_model.service.SysUserService;
+import com.example.demo.base_model.utils.CurrentUserUtils;
 import com.example.demo.base_security.VO.registerVO;
 import com.example.demo.base_security.captha.CaptchaClient;
 import com.example.demo.base_security.captha.bean.CaptchaBean;
 import com.example.demo.base_security.annotation.Log;
 import com.example.demo.base_security.annotation.ValidationParam;
 import com.example.demo.base_security.util.ComUtil;
+import com.example.demo.base_security.util.JWTUtil;
 import com.example.demo.commons.BaseController;
 import com.google.common.collect.ImmutableMap;
 import io.swagger.annotations.Api;
@@ -21,7 +23,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
-
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import java.awt.image.BufferedImage;
@@ -127,4 +128,6 @@ public class LoginController extends BaseController {
             throw new RuntimeException(e.getMessage(),e);
         }
     }
+
+
 }

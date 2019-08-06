@@ -86,8 +86,8 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     }
 
     @Override
-    public void getRoleIsAdminByUserNo(String userNo) throws Exception {
-        List<SysUserRole> userToRole = userToRoleService.selectByUserNo(userNo);
+    public void getRoleIsAdminByUserId(String userId) throws Exception {
+        List<SysUserRole> userToRole = userToRoleService.selectByUserId(userId);
         if (CollectionUtils.isNotEmpty(userToRole)){
             List<String> ids = userToRole.stream().map(item -> item.getRoleId()).collect(Collectors.toList());
             List<SysRole> role = this.listByIds(ids).stream().collect(Collectors.toList());

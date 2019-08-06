@@ -39,7 +39,7 @@ public interface SysUserService extends IService<SysUser> {
 
     Map<String, Object> getLoginUserAndMenuInfo(SysUser user);
 
-    void deleteByUserNo(String userId)throws Exception;
+    void deleteByUserId(String userId)throws Exception;
 
     Page<SysUser> selectPageByConditionUser(Page<SysUser> userPage, String info, Integer[] status, String startTime, String endTime);
 

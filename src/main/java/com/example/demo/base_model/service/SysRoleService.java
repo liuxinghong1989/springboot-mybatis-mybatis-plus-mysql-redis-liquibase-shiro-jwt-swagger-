@@ -42,10 +42,10 @@ public interface SysRoleService extends IService<SysRole> {
 
     /**
      * 判断当前是否是超级管理员,如果是,不能修改信息 抛出异常
-     * @param userNo
+     * @param userId
      * @throws Exception
      */
-    void getRoleIsAdminByUserNo(String userNo) throws Exception;
+    void getRoleIsAdminByUserId(String userId) throws Exception;
 
     Map<String, Object> selectByRoleCode(String roleCode)throws Exception;
 

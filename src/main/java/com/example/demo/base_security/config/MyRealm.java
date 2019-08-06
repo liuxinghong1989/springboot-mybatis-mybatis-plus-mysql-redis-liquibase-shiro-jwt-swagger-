@@ -1,17 +1,22 @@
 package com.example.demo.base_security.config;
 
+import com.example.demo.base_model.entity.SysRes;
 import com.example.demo.base_model.entity.SysUser;
+import com.example.demo.base_model.entity.SysUserRole;
 import com.example.demo.base_model.service.SysResService;
 import com.example.demo.base_model.service.SysRoleService;
 import com.example.demo.base_model.service.SysUserRoleService;
 import com.example.demo.base_model.service.SysUserService;
 import com.example.demo.base_security.commons.Constant;
+import com.example.demo.base_security.util.ComUtil;
 import com.example.demo.base_security.util.JWTUtil;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
@@ -22,6 +27,12 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author liugh
@@ -63,10 +74,9 @@ public class MyRealm extends AuthorizingRealm {
 //            this.roleService = SpringContextBeanService.getBean(SysRoleService.class);
 //        }
 //
-//        String userNo = JWTUtil.getUserNo(principals.toString());
-//        SysUser user = SysUserService.getById(userNo);
-//        SysUserRole userToRole = userToRoleService.selectByUserNo(user.getUserNo());
-//
+//        String userId = JWTUtil.getUserId(principals.toString());
+//        SysUser user = sysUserService.getById(userId);
+//        List<SysUserRole> roleList = userToRoleService.selectByUserId(user.getId());
 //        SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
 //        /*
 //        Role role = roleService.selectOne(new EntityWrapper<Role>().eq("role_code", userToRole.getRoleCode()));
@@ -77,11 +87,15 @@ public class MyRealm extends AuthorizingRealm {
 //        */
 //        //控制菜单级别按钮  类中用@RequiresPermissions("user:list") 对应数据库中code字段来控制controller
 //        ArrayList<String> pers = new ArrayList<>();
-//        List<SysRes> menuList = menuService.findMenuByRoleCode(userToRole.getRoleCode());
-//        for (SysRes per : menuList) {
-//             if (!ComUtil.isEmpty(per.getCode())) {
-//                  pers.add(String.valueOf(per.getCode()));
-//              }
+//        if (CollectionUtils.isNotEmpty(roleList)){
+//            List<String> roleIds = roleList.stream().map(item -> item.getRoleId()).collect(Collectors.toList());
+//            List<SysRes> menuList = menuService.findMenuByRoleCode(roleIds);
+//            for (SysRes per : menuList) {
+//                if (!ComUtil.isEmpty(per.getId())) {
+//                    pers.add(String.valueOf(per.getId()));
+//                }
+//            }
+//
 //        }
 //        Set<String> permission = new HashSet<>(pers);
 //        simpleAuthorizationInfo.addStringPermissions(permission);
@@ -101,24 +115,28 @@ public class MyRealm extends AuthorizingRealm {
             return new SimpleAuthenticationInfo(token, token, this.getName());
         }
         // 解密获得username，用于和redis和数据库进行对比
-        String userNo = JWTUtil.getUserNo(token);
-        if (userNo == null) {
+        String userId = JWTUtil.getUserId(token);
+        if (userId == null) {
             throw new UnauthorizedException("token invalid");
         }
         //实现单点登录
-        Object token1 = redisTemplate.opsForHash().get("token", userNo);
+        Object token1 = redisTemplate.opsForValue().get("token--"+userId);
         if (null !=token1 && StringUtils.isNotBlank(String.valueOf(token1))){
            if (!token.equals(token1)){
                throw new UnauthorizedException("登录重复，请重新登录");
            }
+        }else {
+            throw new UnauthorizedException("登录已过期，请重新登录");
         }
-        SysUser userBean = sysUserService.getById(userNo);
+        SysUser userBean = sysUserService.getById(userId);
         if (userBean == null) {
-            throw new UnauthorizedException("User didn't existed!");
+            throw new UnauthorizedException("该用户不存在");
         }
-        if (! JWTUtil.verify(token, userNo,userBean.getLoginName(), userBean.getPwd())) {
-            throw new UnauthorizedException("Username or password error");
+        if (! JWTUtil.verify(token, userId,userBean.getLoginName(), userBean.getPwd())) {
+            throw new UnauthorizedException("用户名或者密码错误！");
         }
+        //更新redis里面的过期时间
+        JWTUtil.saveRedis(userBean.getId(),token);
         return new SimpleAuthenticationInfo(token, token, this.getName());
     }
 

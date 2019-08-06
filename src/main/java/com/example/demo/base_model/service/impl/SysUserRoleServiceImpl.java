@@ -23,7 +23,7 @@ public class SysUserRoleServiceImpl extends ServiceImpl<SysUserRoleMapper, SysUs
 
       @Override
 //    @Cacheable(value = "UserToRole",keyGenerator="wiselyKeyGenerator")
-        public List<SysUserRole> selectByUserNo(String userId) {
+        public List<SysUserRole> selectByUserId(String userId) {
             QueryWrapper<SysUserRole> ew = new QueryWrapper<>();
             ew.eq("user_id", userId);
             List<SysUserRole> userToRoleList = this.list(ew);

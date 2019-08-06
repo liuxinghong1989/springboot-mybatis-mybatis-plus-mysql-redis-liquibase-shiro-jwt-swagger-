@@ -78,7 +78,7 @@ public class JWTFilter extends BasicHttpAuthenticationFilter{
         if (this.userService == null) {
             this.userService = SpringContextBeanService.getBean(SysUserService.class);
         }
-        String userId =  JWTUtil.getUserNo(token.getPrincipal().toString());
+        String userId =  JWTUtil.getUserId(token.getPrincipal().toString());
         SysUser userBean = userService.getById(userId);
         request.setAttribute("currentUser", userBean);
     }
