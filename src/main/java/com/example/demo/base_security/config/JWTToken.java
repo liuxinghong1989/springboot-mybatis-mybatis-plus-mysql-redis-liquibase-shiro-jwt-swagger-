@@ -3,7 +3,7 @@ package com.example.demo.base_security.config;
 import org.apache.shiro.authc.AuthenticationToken;
 
 /**
- * @author liugh
+ * @author lxh
  * @since 2018-05-03
  */
 public class JWTToken implements AuthenticationToken {

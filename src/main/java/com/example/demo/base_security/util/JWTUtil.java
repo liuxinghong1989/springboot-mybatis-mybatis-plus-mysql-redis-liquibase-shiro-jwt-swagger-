@@ -95,6 +95,30 @@ public class JWTUtil {
     }
 
     /**
+     * 获得token中的信息无需secret解密也能获得（获取token中附带用户信息）
+     * @return token中包含的用户信息
+     */
+    public static SysUser getUser(String token) {
+        try {
+            String resultToken;
+            if (StringUtils.startsWith(token,"B")){
+                resultToken = token.split("Bearer")[1].trim();
+            }else {
+                resultToken = token.split("bearer")[1].trim();
+            }
+            DecodedJWT jwt = JWT.decode(resultToken);
+            SysUser user = new SysUser();
+            String id = jwt.getClaim("id").asString();
+            String loginName = jwt.getClaim("loginName").asString();
+            user.setId(id);
+            user.setLoginName(loginName);
+            return user;
+        } catch (JWTDecodeException e) {
+            return null;
+        }
+    }
+
+    /**
      * 生成签名,指定时间后过期,一经生成不可修改，令牌在指定时间内一直有效
      * @param id 用户主键
      * @param secret 用户的密码
@@ -104,7 +128,7 @@ public class JWTUtil {
         try {
             Date date = new Date(System.currentTimeMillis()+expireTime);
             Algorithm algorithm = Algorithm.HMAC256(secret);
-            // 附带用户id信息
+            // 设置附带用户信息
             String token = "Bearer "+JWT.create()
                     .withClaim("id", id)
                     .withClaim("loginName",loginName)
